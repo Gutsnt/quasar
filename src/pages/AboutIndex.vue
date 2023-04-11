@@ -1,43 +1,32 @@
 <template>
-    <pre>{{ product }}</pre>
-    <ListProduc></ListProduc>
-</template>
-
-<script>
-import ListProduc from 'src/components/ListProduc.vue';
-import {ref} from 'vue'
+    <ListProduc :productos="productos" />
+  </template>
+  <script>
+  import ListProduc from 'src/components/ListProduc.vue';
+  import { ref, onMounted } from 'vue';
   
-
-export default {
-    
-    
-    named: "ListProduc",
+  export default {
     components: { ListProduc },
-    
-    setup(){
-        
-        const product = ([])
-
-        const obtenerProductos = async () => {
-            try {
-                fetch('http://127.0.0.1:8000/api/productos')
-                .then(response => response.json())
-                .then(data => {
-                console.log(data.productos);
-                product.value = data.productos
-                })
-                .catch(error => {
-                console.error('Error al obtener productos:', error);
-                });
-            } catch (error) {
-                
-            }
+    setup() {
+      const productos = ref([]);
+  
+      const obtenerProductos = async () => {
+        try {
+          const response = await fetch('http://127.0.0.1:8000/api/productos');
+          const data = await response.json();
+          productos.value = data.productos;
+        } catch (error) {
+          console.error('Error al obtener productos:', error);
         }
-        
-        return{
-            product
-        }
-        
-    }
-}
-</script>
+      };
+  
+      onMounted(() => {
+        obtenerProductos();
+      });
+  
+      return {
+        productos,
+      };
+    },
+  };
+  </script>

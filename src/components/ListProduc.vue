@@ -1,78 +1,67 @@
 <template>
-    <q-table
-      title="Productos"
-      :columns="columns"
-      :rows="rows"
-      row-key="name"
-    >
-    </q-table>
-  </template>
-  
+  <q-table
+    title="Productos"
+    :columns="columns"
+    :rows="productos"
+    row-key="name"
+  >
+  </q-table>
+</template>
+
 <script>
-const columns = [
-  {
-    name: 'producto',
-    required: true,
-    label: 'Producto',
-    align: 'left',
-    field: row => row.name,
-    format: val => `${val}`,
-    sortable: true
-  },
-  { 
-    name: 'descripcion', 
-    align: 'center', 
-    label: 'Descripcion', 
-    field: 'descripcion', 
-    sortable: true
- },
-  { 
-    name: 'variacion', 
-    label: 'Variacion ', 
-    field: 'Variacion', 
-    sortable: true
- },
-  { 
-    name: 'referencia', 
-    label: 'refencia', 
-    field: 'referencia', 
-    sortable: true
- },
-  { 
-    name: 'precio', 
-    label: 'Precio', 
-    field: 'precio', 
-    sortable: true
- },
-  
-]
-const rows = [
-  {
-    name: 'Producto 1',
-    descripcion: 'Descripcions 1',
-    Variacion: 'Variacion 1',
-  },
-  
-  {
-    name: 'Producto 1',
-    descripcion: 'Categoria 1',
-    Variacion: 'Variacion 1',
-  },
-  
-  
-]
+import { watch } from 'vue';
+
+
 
 export default {
-  named: 'ListProduc', // Nombre del componente
-    setup(){
-        return {
-        columns,
-        rows
-        }
+  props: {
+    productos: {
+      type: Array,
+      required: true,
     },
-  // Otras opciones de configuración del componente
-}
+  },
+  setup(props) {
+    const columns = [
+      {
+        name: 'producto',
+        required: true,
+        label: 'Producto',
+        align: 'left',
+        field: row => row.nombre,
+        format: val => `${val}`,
+        sortable: true,
+      },
+      {
+        name: 'descripcion',
+        align: 'center',
+        label: 'Descripcion',
+        field: 'descripcion',
+        sortable: true,
+      },
+      {
+        name: 'referencia',
+        label: 'refencia',
+        field: 'referencia',
+        sortable: true,
+      },
+      {
+        name: 'precio',
+        label: 'Precio',
+        field: 'precio',
+        sortable: true,
+      },
+    ];
 
+    watch(
+      () => props.productos,
+      (newProductos) => {
+        console.log('Nuevos productos:', newProductos);
+      }
+    );
 
+    return {
+      columns,
+    };
+  },
+};
 </script>
-  
