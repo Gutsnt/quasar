@@ -2,6 +2,7 @@
     <ListProduc :productos="productos" />
   </template>
   <script>
+  
   import ListProduc from 'src/components/ListProduc.vue';
   import { ref, onMounted } from 'vue';
   

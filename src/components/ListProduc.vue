@@ -55,7 +55,7 @@ export default {
     watch(
       () => props.productos,
       (newProductos) => {
-        console.log('Nuevos productos:', newProductos);
+        //console.log('Nuevos productos:', newProductos);
       }
     );
 

@@ -5,12 +5,14 @@
         class="row q-col-gutter-md"
         @submit.prevent="created"
         @reset="onReset"
+        ref = "myForm"
         >
             <div class="col-12 col-sm-3">
                 <q-input
                 type="text"
                 label="Name"
                 v-model="producto"
+                lazy-rules
                 :rules="[ val => val && val.length > 0 || 'Por favor escribe algo']"
                 />
             </div>
@@ -20,6 +22,7 @@
                 type="text"
                 label="Descripcion"
                 v-model="descripcion"
+                lazy-rules
                 :rules="[ val => val && val.length > 0 || 'Por favor escribe algo']"
                 />
             </div>
@@ -29,6 +32,7 @@
                 type="text"
                 label="Referencia"
                 v-model="referencia"
+                lazy-rules
                 :rules="[ val => val && val.length > 0 || 'Por favor escribe algo']"
                 />
             </div>
@@ -37,6 +41,7 @@
                 <q-input
                 label="Precio"
                 v-model="precio"
+                lazy-rules
                 type="number"
                 :rules="[ val => val && val.length > 0 || 'Por favor escribe algo']"
                 />
@@ -58,6 +63,8 @@ export default {
 
     setup(){
         const $q = useQuasar()
+
+        const myForm = ref(null)
 
         const producto = ref(null)
         const descripcion = ref(null)
@@ -86,7 +93,8 @@ export default {
         const onReset = () => {
             producto.value = null
             descripcion.value = null
-            variaciones.value = null
+            referencia.value = null
+            precio.value = null
         }
         const created = () => {
             let url = 'http://127.0.0.1:8000/api/productos/create'
@@ -107,6 +115,12 @@ export default {
             }   
             fetch(url, post)
             .then((response) => response.json)
+            .then((reponse => {
+
+                myForm.value.resetValidation()
+
+                onReset()
+            }))
         }
 
         return{
@@ -116,7 +130,8 @@ export default {
             precio,
             created,
             onReset,
-            productos
+            productos,
+            myForm
         }
        
     },
