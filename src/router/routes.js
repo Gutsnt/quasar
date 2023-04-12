@@ -8,6 +8,7 @@ const routes = [
       { path: '/about', component: () => import('src/pages/AboutIndex.vue') },
       { path: '/form', component: () => import('src/pages/FormProduc.vue') },
       { path: '/addVariacion', component: () => import('src/pages/FormVariaciones.vue') },
+      { path: '/productVariation', component: () => import('src/pages/ProductVarian.vue') },
     ]
   },
 

@@ -65,7 +65,7 @@
             v-ripple
             active-class="my-menu-link" 
             exact
-            to="">
+            to="/productVariation">
               <q-item-section avatar>
                 <q-icon name="info" />
               </q-item-section>

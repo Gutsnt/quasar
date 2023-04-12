@@ -3,7 +3,7 @@
         <h4>Productos</h4>
         <q-form 
         class="row q-col-gutter-md"
-        @submit.prevent="provesarFormulario"
+        @submit.prevent="created"
         @reset="onReset"
         >
             <div class="col-12 col-sm-3">
@@ -48,10 +48,12 @@
             </div>
         </q-form>
     </q-page>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </template>
 <script>
 import {ref} from 'vue'
 import { useQuasar } from 'quasar'
+import { createTemplateLiteral } from '@vue/compiler-core'
 export default {
 
     setup(){
@@ -78,6 +80,7 @@ export default {
                 referencia: referencia.value,
                 precio: precio.value
             }]
+
         } 
 
         const onReset = () => {
@@ -85,16 +88,38 @@ export default {
             descripcion.value = null
             variaciones.value = null
         }
-        
+        const created = () => {
+            let url = 'http://127.0.0.1:8000/api/productos/create'
+            let data = {
+                name: producto.value,
+                descripcion: descripcion.value,
+                referencia: referencia.value,
+                precio: precio.value
+            }
+
+            let post = {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers:{
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                }
+            }   
+            fetch(url, post)
+            .then((response) => response.json)
+        }
+
         return{
             producto,
             descripcion,
             referencia,
             precio,
-            provesarFormulario,
+            created,
             onReset,
             productos
         }
-    }
+       
+    },
+    
 }
 </script>

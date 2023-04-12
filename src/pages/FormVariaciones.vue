@@ -3,13 +3,13 @@
         <h4>Variaciones</h4>
         <q-form 
         class="row q-col-gutter-md"
-        @submit.prevent="provesarFormulario"
+        @submit.prevent="created"
         @reset="onReset"
         >
             <div class="col-12 col-sm-3">
                 <q-input
                 type="text"
-                label="Name"
+                label="Referencia"
                 v-model="referencia"
                 :rules="[ val => val && val.length > 0 || 'Por favor escribe algo']"
                 />
@@ -48,6 +48,7 @@
             </div>
         </q-form>
     </q-page>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </template>
 <script>
 import {ref} from 'vue'
@@ -75,7 +76,7 @@ export default {
             })
 
             variaciones.value = [...variaciones.value, {
-                name: producto.value,
+                name: referencia.value,
                 descripcion: descripcion.value,
                 referencia: referencia.value,
                 precio: precio.value
@@ -87,6 +88,26 @@ export default {
             descripcion.value = null
             variaciones.value = null
         }
+        const created = () => {
+            let url = 'http://127.0.0.1:8000/api/variaciones/create'
+            let data = {
+                referencia: referencia.value,
+                descripcion: descripcion.value,
+                precio: precio.value,
+                producto: producto.value
+            }
+
+            let post = {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers:{
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                }
+            }   
+            fetch(url, post)
+            .then((response) => response.json)
+        }
         
         return{
             producto,
@@ -96,7 +117,8 @@ export default {
             provesarFormulario,
             onReset,
             opciones,
-            variaciones
+            variaciones,
+            created
         }
     }
 }
